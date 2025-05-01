@@ -10,8 +10,8 @@ public class PickupOrder extends Order {
         this.pickupTime = LocalDateTime.now();
     }
 
-    public PickupOrder(String orderStatus, List<Item> items, LocalDateTime pickupTime) {
-        super(orderStatus, items);
-        this.pickupTime = pickupTime;
+    public PickupOrder(List<Item> items) {
+        super(items);
+        this.pickupTime = LocalDateTime.now();;
     }
 }

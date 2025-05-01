@@ -23,6 +23,7 @@ public class Driver extends User {
      */
     public List<DeliveryOrder> viewAvailableDeliveries() {
         //TODO
+        return null;
     }
 
     /**
@@ -32,6 +33,7 @@ public class Driver extends User {
      */
     public boolean acceptDelivery(Order order) {
         //TODO
+        return false;
     }
 
     /**

@@ -16,14 +16,14 @@ public class Order {
 
     public Order() {
         this.orderNumber = nextOrderNumber++;
-        this.orderStatus = "";
+        this.orderStatus = "open";
         this.items = new ArrayList<>();
         this.timeCreated = LocalDateTime.now();
     }
 
-    public Order(String orderStatus, List<Item> items) {
+    public Order(List<Item> items) {
         this.orderNumber = nextOrderNumber++;
-        this.orderStatus = orderStatus;
+        this.orderStatus = "open";
         this.items = items;
         this.timeCreated = LocalDateTime.now();
     }

@@ -6,18 +6,18 @@ import java.util.Objects;
 
 public class Customer extends User {
     private String address;
-    private List<Order> activeOrders;
+    private Order activeOrder;
 
     public Customer() {
         super();
         this.address = "";
-        this.activeOrders = new ArrayList<>();
+        this.activeOrder = null;
     }
 
-    public Customer(String username, String email, String address, List<Order> activeOrder) {
+    public Customer(String username, String email, String address) {
         super(username, email);
         this.address = address;
-        this.activeOrders = activeOrder;
+        this.activeOrder = null;
     }
 
     /**
@@ -25,6 +25,7 @@ public class Customer extends User {
      */
     public List<Item> viewMenu() {
         //TODO
+        return null;
     }
 
     /**
@@ -41,23 +42,35 @@ public class Customer extends User {
     /**
      * places an order with an item
      * @param item the input item
+     * @param delivery a boolean value whether if the customer wants a delivery order or not
      */
-    public void placeOrder(Item item) {
-        Order order = new Order();
-        order.addItem(item);
-        activeOrders.add(order);
+    public void placeOrder(Item item, boolean delivery) {
+        if (delivery) {
+           activeOrder = new DeliveryOrder();
+           activeOrder.addItem(item);
+        } else {
+            activeOrder = new PickupOrder();
+            activeOrder.addItem(item);
+        }
     }
 
     /**
      * places an order with a list of items
      * @param items the input list of items
+     * @param delivery a boolean value whether if the customer wants a delivery order or not
      */
-    public void placeOrder(List<Item> items) {
-        Order order = new Order();
-        for (Item item : items) {
-            order.addItem(item);
+    public void placeOrder(List<Item> items, boolean delivery) {
+        if (delivery) {
+            activeOrder = new DeliveryOrder();
+            for (Item item : items) {
+                activeOrder.addItem(item);
+            }
+        } else {
+            activeOrder = new PickupOrder();
+            for (Item item : items) {
+                activeOrder.addItem(item);
+            }
         }
-        activeOrders.add(order);
     }
 
     /**
@@ -97,5 +110,13 @@ public class Customer extends User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Order getActiveOrder() {
+        return activeOrder;
+    }
+
+    public void setActiveOrder(Order activeOrder) {
+        this.activeOrder = activeOrder;
     }
 }

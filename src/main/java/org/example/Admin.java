@@ -24,6 +24,7 @@ public class Admin extends User {
      */
     public List<Order> viewReport() {
         //TODO
+        return null;
     }
 
     /**
@@ -32,6 +33,7 @@ public class Admin extends User {
      */
     public List<Order> viewOpenOrders() {
         //TODO
+        return null;
     }
 
     /**
@@ -48,6 +50,7 @@ public class Admin extends User {
      */
     public boolean cancelOrder(Order order) {
         //TODO
+        return false;
     }
 
     @Override

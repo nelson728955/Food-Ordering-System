@@ -13,8 +13,8 @@ public class DeliveryOrder extends Order implements Deliverable {
         this.distance = 0;
     }
 
-    public DeliveryOrder(String orderStatus, List<Item> items, Driver assignedDriver, int distance) {
-        super(orderStatus, items);
+    public DeliveryOrder(List<Item> items, Driver assignedDriver, int distance) {
+        super(items);
         this.assignedDriver = assignedDriver;
         this.distance = distance;
     }
@@ -37,7 +37,8 @@ public class DeliveryOrder extends Order implements Deliverable {
     @Override
     public double calcTips(int percentage) {
         double total = items.stream().mapToDouble(Item::getPrice).sum();
-        return total * percentage / 100.0;
+        double tip = total * percentage / 100.0;
+        return Math.round(tip * 100.0) / 100.0;
     }
 
     /**
