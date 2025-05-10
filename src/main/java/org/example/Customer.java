@@ -1,8 +1,8 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class Customer extends User {
     private String address;
@@ -22,10 +22,26 @@ public class Customer extends User {
 
     /**
      * lets the customer view the full menu of the restaurant along with the prices
+     * @return the menu as a list of items
      */
     public List<Item> viewMenu() {
-        //TODO
-        return null;
+        List<Item> menu = new LinkedList<>();
+        File file = new File("src/main/resources/menu.csv");
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                String name = parts[0].trim();
+                double price = Double.parseDouble(parts[1].trim());
+                Item item = new Item(name, price);
+                menu.add(item);
+
+            }
+        } catch (FileNotFoundException e) {
+        }
+
+        return menu;
     }
 
     /**
@@ -77,8 +93,9 @@ public class Customer extends User {
      * Tracks the order of the customer
      * @return the status of the order
      */
-    public String trackOrder(Order order) {
-        return order.getOrderStatus();
+    public String trackOrder() {
+        if (activeOrder == null) return "No active order";
+        return activeOrder.getOrderStatus().toString();
     }
 
 

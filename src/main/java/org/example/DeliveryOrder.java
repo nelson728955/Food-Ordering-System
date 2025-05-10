@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class DeliveryOrder extends Order implements Deliverable {
-    private Driver assignedDriver;
+    private String assignedDriver;
     private int distance;
 
     public DeliveryOrder() {
@@ -13,7 +13,7 @@ public class DeliveryOrder extends Order implements Deliverable {
         this.distance = 0;
     }
 
-    public DeliveryOrder(List<Item> items, Driver assignedDriver, int distance) {
+    public DeliveryOrder(List<Item> items, String assignedDriver, int distance) {
         super(items);
         this.assignedDriver = assignedDriver;
         this.distance = distance;
@@ -36,8 +36,7 @@ public class DeliveryOrder extends Order implements Deliverable {
      */
     @Override
     public double calcTips(int percentage) {
-        double total = items.stream().mapToDouble(Item::getPrice).sum();
-        double tip = total * percentage / 100.0;
+        double tip = getTotal() * percentage / 100.0;
         return Math.round(tip * 100.0) / 100.0;
     }
 
@@ -76,11 +75,11 @@ public class DeliveryOrder extends Order implements Deliverable {
         return Objects.hash(super.hashCode(), assignedDriver, distance);
     }
 
-    public Driver getAssignedDriver() {
+    public String getAssignedDriver() {
         return assignedDriver;
     }
 
-    public void setAssignedDriver(Driver assignedDriver) {
+    public void setAssignedDriver(String assignedDriver) {
         this.assignedDriver = assignedDriver;
     }
 

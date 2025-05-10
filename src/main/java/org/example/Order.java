@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Order {
     protected int orderNumber;
-    protected String orderStatus;
+    protected OrderStatus orderStatus;
     protected List<Item> items;
     protected LocalDateTime timeCreated;
 
@@ -16,14 +16,14 @@ public class Order {
 
     public Order() {
         this.orderNumber = nextOrderNumber++;
-        this.orderStatus = "open";
+        this.orderStatus = OrderStatus.PENDING;
         this.items = new ArrayList<>();
         this.timeCreated = LocalDateTime.now();
     }
 
     public Order(List<Item> items) {
         this.orderNumber = nextOrderNumber++;
-        this.orderStatus = "open";
+        this.orderStatus = OrderStatus.PENDING;
         this.items = items;
         this.timeCreated = LocalDateTime.now();
     }
@@ -46,6 +46,14 @@ public class Order {
         if (item != null) items.add(item);
     }
 
+    /**
+     * sums up all the prices of all items
+     * @return the total price
+     */
+    public double getTotal() {
+        return items.stream().mapToDouble(Item::getPrice).sum();
+    }
+
     public class OrderTimeComparator implements Comparator<Order> {
         @Override
         public int compare(Order o1, Order o2) {
@@ -65,6 +73,10 @@ public class Order {
         return Objects.hash(orderNumber, orderStatus, items, timeCreated);
     }
 
+    public enum OrderStatus {
+        PENDING, PREPARING, OUT_FOR_DELIVERY, DELIVERED, CANCELED
+    }
+
     public int getOrderNumber() {
         return orderNumber;
     }
@@ -73,11 +85,11 @@ public class Order {
         this.orderNumber = orderNumber;
     }
 
-    public String getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 

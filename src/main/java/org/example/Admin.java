@@ -1,21 +1,18 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Admin extends User {
-    int id;
-
-    private static int nextId = 0;
+    private List<Order> receivedOrders = new ArrayList<>();
 
     public Admin() {
         super();
-        this.id = nextId++;
     }
 
     public Admin(String username, String email) {
         super(username, email);
-        this.id = nextId++;
     }
 
     /**
@@ -23,8 +20,9 @@ public class Admin extends User {
      * @return The list of completed orders
      */
     public List<Order> viewReport() {
-        //TODO
-        return null;
+        return receivedOrders.stream()
+                .filter(order -> order.getOrderStatus() == Order.OrderStatus.DELIVERED)
+                .toList();
     }
 
     /**
@@ -32,15 +30,18 @@ public class Admin extends User {
      * @return The list of open orders
      */
     public List<Order> viewOpenOrders() {
-        //TODO
-        return null;
+        return receivedOrders.stream()
+                .filter(order -> order.getOrderStatus() != Order.OrderStatus.DELIVERED)
+                .toList();
     }
 
     /**
-     * processes the order that is next in the queue
+     * processes an order and updates the status of the order
+     * @param order the order to process
      */
-    public void processOrder() {
-        //TODO
+    public void processOrder(Order order) {
+        order.setOrderStatus(Order.OrderStatus.PREPARING);
+        receivedOrders.add(order);
     }
 
     /**
@@ -49,8 +50,22 @@ public class Admin extends User {
      * @return a boolean value whether if the cancelation was successful
      */
     public boolean cancelOrder(Order order) {
-        //TODO
+        if (receivedOrders.contains(order)) {
+            receivedOrders.remove(order);
+            order.setOrderStatus(Order.OrderStatus.CANCELED);
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "receivedOrders=" + receivedOrders +
+                ", id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 
     @Override
@@ -58,36 +73,19 @@ public class Admin extends User {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Admin admin = (Admin) o;
-        return id == admin.id;
+        return Objects.equals(receivedOrders, admin.receivedOrders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id);
+        return Objects.hash(super.hashCode(), receivedOrders);
     }
 
-    @Override
-    public String toString() {
-        return "Admin{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public List<Order> getReceivedOrders() {
+        return receivedOrders;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public static int getNextId() {
-        return nextId;
-    }
-
-    public static void setNextId(int nextId) {
-        Admin.nextId = nextId;
+    public void setReceivedOrders(List<Order> receivedOrders) {
+        this.receivedOrders = receivedOrders;
     }
 }
